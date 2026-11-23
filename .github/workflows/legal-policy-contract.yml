@@ -1,0 +1,27 @@
+name: legal-policy-contract
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legal-policy-contract-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  policy-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run legal-page regression tests
+        run: python -m unittest discover -s tests -v
